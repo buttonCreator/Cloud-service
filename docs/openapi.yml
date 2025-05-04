@@ -1,0 +1,130 @@
+basePath: /api
+consumes:
+    - application/json
+definitions:
+    registerRequest:
+        properties:
+            id:
+                format: int64
+                type: integer
+                x-go-name: ID
+        type: object
+        x-go-package: Cloud/handler
+    updateRequest:
+        properties:
+            rate_per_minute:
+                format: int64
+                type: integer
+                x-go-name: RatePerMinute
+            tokens:
+                format: int64
+                type: integer
+                x-go-name: Tokens
+            tokens_cap:
+                format: int64
+                type: integer
+                x-go-name: TokensCap
+        required:
+            - tokens
+            - tokens_cap
+            - rate_per_minute
+        type: object
+        x-go-package: Cloud/handler
+host: localhost
+info:
+    title: 'Cloud Service:'
+    version: 1.0.0
+paths:
+    /v1/user:
+        post:
+            description: Register user
+            operationId: Register
+            parameters:
+                - in: body
+                  name: Body
+                  schema:
+                    $ref: '#/definitions/registerRequest'
+            responses:
+                "200":
+                    $ref: '#/responses/SuccessResponse'
+                "400":
+                    $ref: '#/responses/commonResponse'
+                "500":
+                    $ref: '#/responses/commonResponse'
+            tags:
+                - user
+        put:
+            description: Update data of user
+            operationId: UpdateUser
+            parameters:
+                - description: User ID to update
+                  in: query
+                  name: user_id
+                  required: true
+                  type: string
+                  x-go-name: UserID
+                - in: body
+                  name: Body
+                  schema:
+                    $ref: '#/definitions/updateRequest'
+            responses:
+                "200":
+                    $ref: '#/responses/SuccessResponse'
+                "400":
+                    $ref: '#/responses/commonResponse'
+                "404":
+                    $ref: '#/responses/commonResponse'
+                "500":
+                    $ref: '#/responses/commonResponse'
+            tags:
+                - user
+    /v1/user/request:
+        get:
+            description: Simulate some request from user
+            operationId: SomeRequest
+            parameters:
+                - description: User ID making the request
+                  in: query
+                  name: user_id
+                  required: true
+                  type: string
+                  x-go-name: UserID
+            responses:
+                "200":
+                    $ref: '#/responses/SuccessResponse'
+                "400":
+                    $ref: '#/responses/commonResponse'
+                "404":
+                    $ref: '#/responses/commonResponse'
+                "500":
+                    $ref: '#/responses/commonResponse'
+            tags:
+                - user
+produces:
+    - application/json
+responses:
+    SuccessResponse:
+        description: Return status
+        schema:
+            properties:
+                status:
+                    example: success
+                    type: string
+                    x-go-name: Status
+            type: object
+    commonResponse:
+        description: Return error message
+        schema:
+            properties:
+                message:
+                    example: error message
+                    type: string
+                    x-go-name: Message
+                status:
+                    example: error
+                    type: string
+                    x-go-name: Status
+            type: object
+schemes:
+    - https
+swagger: "2.0"
