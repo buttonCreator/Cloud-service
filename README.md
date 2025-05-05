@@ -29,6 +29,10 @@ API Gateway с поддержкой ограничения запросов (rat
 
 ### Сборка и запуск
 ```bash
+docker build -t cloud-service -f ./docker/Dockerfile .
+```
+
+```bash
 docker-compose up -d
 ```
 
